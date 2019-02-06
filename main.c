@@ -50,11 +50,11 @@
 #define ARRAY_SIZE(stuff)                        (sizeof(stuff) / sizeof(stuff[0]))
 
 #define TARGET_FREQ                              WS2811_TARGET_FREQ
-#define GPIO_PIN                                 18
+#define GPIO_PIN                                 45
 #define DMA                                      5
 
-#define WIDTH                                    3
-#define HEIGHT                                   3
+#define WIDTH                                    1
+#define HEIGHT                                   1
 #define LED_COUNT                                (WIDTH * HEIGHT)
 
 
