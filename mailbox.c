@@ -65,7 +65,7 @@ void *mapmem(unsigned base, unsigned size)
    printf("base=0x%x, mem=%p\n", base, mem);
 #endif
    if (mem == MAP_FAILED) {
-      printf("mmap error %d\n", (int)mem);
+      printf("mmap error %lu\n", (uintptr_t)mem);
       exit (-1);
    }
    close(mem_fd);
@@ -76,7 +76,7 @@ void *unmapmem(void *addr, unsigned size)
 {
    int s = munmap(addr, size);
    if (s != 0) {
-      printf("munmap error %d\n", s);
+      printf("munmap error %lu\n", s);
       exit (-1);
    }
 
