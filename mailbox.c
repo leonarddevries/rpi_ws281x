@@ -76,7 +76,7 @@ void *unmapmem(void *addr, unsigned size)
 {
    int s = munmap(addr, size);
    if (s != 0) {
-      printf("munmap error %lu\n", s);
+      printf("munmap error %d\n", s);
       exit (-1);
    }
 
