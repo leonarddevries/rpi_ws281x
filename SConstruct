@@ -59,7 +59,7 @@ for platform, tool, flags in platforms:
         options = opts,
         tools = tool,
         toolpath = ['.'],
-        ENV = {'PATH' : os.environ['PATH']},
+        ENV = {'PATH' : os.environ['PATH'], 'STAGING_DIR': os.environ['STAGING_DIR']},
         LIBS = [],
     )
     env.MergeFlags(flags)
