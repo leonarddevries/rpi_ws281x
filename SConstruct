@@ -37,7 +37,7 @@ opts.Add(BoolVariable('V',
 
 opts.Add('TOOLCHAIN',
          'Set toolchain for cross compilation (e.g. arm-linux-gnueabihf)',
-         '')
+         'arm-openwrt-linux-muslgnueabi')
 
 platforms = [ 
     [
