@@ -327,6 +327,13 @@ static const rpi_hw_t rpi_hw_info[] = {
         .videocore_base = VIDEOCORE_BASE_RPI2,
         .desc = "Compute Module 3/L3",
     },
+    {
+        .hwver  = 0xa220a0,
+        .type = RPI_HWVER_TYPE_PI2,
+        .periph_base = PERIPH_BASE_RPI2,
+        .videocore_base = VIDEOCORE_BASE_RPI2,
+        .desc = "Compute Module 3/L3",
+    },
 
 };
 
