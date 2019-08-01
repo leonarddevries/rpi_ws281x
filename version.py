@@ -1,7 +1,7 @@
 #
 # SConstruct
 #
-# Copyright (c) 2014 Jeremy Garff <jer @ jers.net>
+# Copyright (c) 2016 Jeremy Garff <jer @ jers.net>
 #
 # All rights reserved.
 #
@@ -15,7 +15,7 @@
 #         provided with the distribution.
 #     3.  Neither the name of the owner nor the names of its contributors may be used to endorse
 #         or promote products derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
 # IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
 # FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE
@@ -26,51 +26,46 @@
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+import SCons, os
 
-import os
+def version_flags(env):
+    if not env['V']:
+        env['VERSIONCOMSTR'] = 'Version ${TARGET}'
 
+def version_builders(env):
+    def generate_version_header(target, source, env):
+        headername = os.path.basename(target[0].abspath)
+        headerdef = headername.replace('.', '_').replace('-', '_').upper()
 
-opts = Variables()
-opts.Add(BoolVariable('V',
-                      'Verbose build',
-                      False))
+        try:
+            version = open(source[0].abspath, 'r').readline().strip().split('.')
+        except:
+            version = [ '0', '0', '0' ]
 
-opts.Add('TOOLCHAIN',
-         'Set toolchain for cross compilation (e.g. arm-linux-gnueabihf)',
-         'arm-openwrt-linux-muslgnueabi')
+        f = open(headername, 'w')
+        f.write('/* Auto Generated Header built by version.py - DO NOT MODIFY */\n')
+        f.write('\n')
+        f.write('#ifndef __%s__\n' % (headerdef))
+        f.write('#define __%s__\n' % (headerdef))
+        f.write('\n')
+        f.write('#define VERSION_MAJOR %s\n' % version[0])
+        f.write('#define VERSION_MINOR %s\n' % version[1])
+        f.write('#define VERSION_MICRO %s\n' % version[2])
+        f.write('\n')
+        f.write('#endif /* __%s__ */\n' % (headerdef))
+        f.close()
 
-platforms = [ 
-    [
-        'userspace',            # Target Name
-        [ 'linux', 'version' ], # Scons tool (linux, avr, etc.)
-        {                       # Special environment setup
-            'CPPPATH' : [
-            ],
-            'LINKFLAGS' : [
-                "-lrt",
-            ],
-        },
-    ], 
-]
+    env.Append(BUILDERS = {
+        'Version' : SCons.Builder.Builder(
+            action = SCons.Action.Action(generate_version_header, '${VERSIONCOMSTR}'),
+            suffix = '.h',
+        ),
+    })
 
-clean_envs = {}
-for platform, tool, flags in platforms:
-    env = Environment(
-        options = opts,
-        tools = tool,
-        toolpath = ['.'],
-        ENV = {'PATH' : os.environ['PATH'], 'STAGING_DIR': os.environ['STAGING_DIR']},
-        LIBS = [],
-    )
-    env.MergeFlags(flags)
-    clean_envs[platform] = env
+def exists(env):
+    return 1
 
-Help(opts.GenerateHelpText(clean_envs))
+def generate(env, **kwargs):
+    [f(env) for f in (version_flags, version_builders)]
 
-if env['TOOLCHAIN'] != '':
-    env['CC'] = env['TOOLCHAIN'] + '-gcc'
-    env['AR'] = env['TOOLCHAIN'] + '-ar'
-
-Export(['clean_envs'])
-SConscript('SConscript');
 
