@@ -652,7 +652,7 @@ static int set_driver_mode(ws2811_t *ws2811, int gpionum)
         ws2811->device->driver_mode = PWM;
         // Check gpio for PWM1 (2nd channel) is OK if used
         gpionum2 = ws2811->channel[1].gpionum;
-        if (gpionum2 == 0 || gpionum2 == 13 || gpionum2 == 19) {
+        if (gpionum2 == 0 || gpionum2 == 13 || gpionum2 == 19 || gpionum == 41 || gpionum == 45 || gpionum == 53) {
             return 0;
         }
     }
@@ -711,7 +711,7 @@ static int check_hwver_and_gpionum(ws2811_t *ws2811)
             // Special case: nothing in channel 0, channel 1 only PWM1 allowed
             // PWM1 only available on 40 pin GPIO interface
             gpionum = ws2811->channel[1].gpionum;
-            if ((gpionum == 13) || (gpionum == 19))
+            if (gpionum == 13 || gpionum == 19 || gpionum == 41 || gpionum == 45 || gpionum == 53)
             {
                 ws2811->device->driver_mode = PWM;
                 return 0;
