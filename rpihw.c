@@ -43,6 +43,7 @@
 
 #define PERIPH_BASE_RPI                          0x20000000
 #define PERIPH_BASE_RPI2                         0x3f000000
+#define PERIPH_BASE_RPI4                         0xfe000000
 
 #define VIDEOCORE_BASE_RPI                       0x40000000
 #define VIDEOCORE_BASE_RPI2                      0xc0000000
